@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+//
+// Copyright 2020 Signal Messenger, LLC.
+// SPDX-License-Identifier: AGPL-3.0-only
+//
+
+package signal.proto.device_name;
+
+message DeviceName {
+  optional bytes ephemeralPublic = 1;
+  optional bytes syntheticIv     = 2;
+  optional bytes ciphertext      = 3;
+}
