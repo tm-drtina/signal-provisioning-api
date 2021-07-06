@@ -8,14 +8,14 @@ pub struct DeviceRegistrationRequest {
     pub capabilities: HashMap<String, bool>,
     pub fetchesMessages: bool,
     pub name: String,
-    pub registrationId: u16,
+    pub registrationId: u32,
     pub supportsSms: bool,
     pub unidentifiedAccessKey: Option<String>,
     pub unrestrictedUnidentifiedAccess: bool,
 }
 
 impl DeviceRegistrationRequest {
-    pub fn new(name: String, registration_id: u16) -> Self {
+    pub fn new(name: String, registration_id: u32) -> Self {
         let mut capabilities = HashMap::new();
         capabilities.insert("gv2-3".to_string(), true);
         capabilities.insert("gv1-migration".to_string(), true);
