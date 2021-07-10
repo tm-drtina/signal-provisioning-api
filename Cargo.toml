@@ -5,8 +5,8 @@ authors = ["Tomas Drtina <tm.drtina@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-libsignal-protocol = { git = "https://github.com/signalapp/libsignal-client.git", tag = "v0.8.2" }
-signal-crypto = { git = "https://github.com/signalapp/libsignal-client.git", tag = "v0.8.2" }
+libsignal-protocol = { git = "https://github.com/signalapp/libsignal-client.git", tag = "v0.8.3" }
+signal-crypto = { git = "https://github.com/signalapp/libsignal-client.git", tag = "v0.8.3" }
 
 aes = "0.7.4"
 subtle = "2.3"
@@ -14,9 +14,8 @@ block-modes = "0.8"
 
 base64 = "0.13.0"
 bytes = "^1"
-prost = "0.7"
+prost = "0.8"
 rand = "0.7.3"
-serde = "^1.0.126"
 
 [build-dependencies]
-prost-build = "0.7"
+prost-build = "0.8"
