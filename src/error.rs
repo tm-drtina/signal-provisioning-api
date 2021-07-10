@@ -1,6 +1,6 @@
 use libsignal_protocol::SignalProtocolError;
 use prost::DecodeError;
-use signal_crypto::Error as SignalCryptoError;
+use crate::SignalCryptoError;
 
 #[derive(Debug)]
 pub enum Error {
@@ -10,19 +10,19 @@ pub enum Error {
 
 impl From<SignalCryptoError> for Error {
 	fn from(err: SignalCryptoError) -> Self {
-		Error::SignalCryptoError(err)
+		Self::SignalCryptoError(err)
 	}
 }
 
 impl From<SignalProtocolError> for Error {
 	fn from(err: SignalProtocolError) -> Self {
-		Error::SignalProtocolError(err)
+		Self::SignalProtocolError(err)
 	}
 }
 
 impl From<DecodeError> for Error {
 	fn from(err: DecodeError) -> Self {
-		SignalProtocolError::from(err).into()
+		err.into()
 	}
 }
 
