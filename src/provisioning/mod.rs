@@ -1,7 +1,7 @@
-mod socket;
 mod envelope;
-mod uuid;
 mod message;
+mod socket;
+mod uuid;
 
 use envelope::ProvisionEnvelope;
 pub use message::ProvisionMessage;
