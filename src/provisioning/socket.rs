@@ -36,9 +36,7 @@ impl ProvisioningSocket {
     }
 
     pub fn serialize<T: ProstMessage>(msg: T) -> Vec<u8> {
-        let mut buf = Vec::new();
-        msg.encode(&mut buf).expect("We are serializing into Vec, we have the capacity.");
-        buf
+        msg.encode_to_vec()
     }
 
     pub fn acknowledge(request_id: u64) -> WebSocketMessage {
