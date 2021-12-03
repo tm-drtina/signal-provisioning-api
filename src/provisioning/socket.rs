@@ -3,7 +3,6 @@ use std::time::SystemTime;
 
 use rand::rngs::OsRng;
 
-use bytes::Bytes;
 use prost::Message as ProstMessage;
 
 use libsignal_protocol::{KeyPair, SignalProtocolError};
@@ -78,8 +77,7 @@ impl ProvisioningSocket {
         Self::request(request)
     }
 
-    pub fn process_message(&mut self, bytes: Vec<u8>) -> Result<Option<u64>> {
-        let bytes = Bytes::from(bytes);
+    pub fn process_message(&mut self, bytes: &[u8]) -> Result<Option<u64>> {
         let proto_structure = WebSocketMessage::decode(bytes)?;
         match proto_structure {
             WebSocketMessage {
