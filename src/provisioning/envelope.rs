@@ -8,7 +8,7 @@ use crate::error::{Error, Result};
 
 use std::convert::TryFrom;
 
-use libsignal_protocol::{PrivateKey, PublicKey, SignalProtocolError, HKDF};
+use libsignal_protocol::{PrivateKey, PublicKey, SignalProtocolError};
 use prost::Message;
 use signal_crypto::CryptographicMac;
 use subtle::ConstantTimeEq;
@@ -49,9 +49,12 @@ impl ProvisionEnvelope {
 
     pub fn decrypt(&self, ephemeral_private_key: PrivateKey) -> Result<Vec<u8>> {
         let ec_res = ephemeral_private_key.calculate_agreement(self.public_key())?;
-        let hkdf = HKDF::new(3)?;
-        let secrets =
-            hkdf.derive_secrets(&ec_res, "TextSecure Provisioning Message".as_bytes(), 64)?;
+
+        let mut secrets = [0; 64];
+        hkdf::Hkdf::<sha2::Sha256>::new(None, &ec_res)
+            .expand(b"TextSecure Provisioning Message", &mut secrets)
+            .expect("valid length");
+
         let (cipher_key, mac_key) = secrets.split_at(32);
 
         let mac_valid = self.verify_mac(mac_key)?;
