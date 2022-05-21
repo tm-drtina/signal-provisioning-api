@@ -8,7 +8,7 @@ use crate::error::{Error, Result};
 
 use std::convert::TryFrom;
 
-use libsignal_protocol::{PrivateKey, PublicKey, SignalProtocolError};
+use libsignal_protocol::{CiphertextMessageType, PrivateKey, PublicKey, SignalProtocolError};
 use prost::Message;
 use signal_crypto::CryptographicMac;
 use subtle::ConstantTimeEq;
@@ -60,7 +60,11 @@ impl ProvisionEnvelope {
         let mac_valid = self.verify_mac(mac_key)?;
 
         if !mac_valid {
-            return Err(SignalProtocolError::InvalidCiphertext.into());
+            return Err(SignalProtocolError::InvalidMessage(
+                CiphertextMessageType::Whisper, // TODO: Is this correct?
+                "MAC verification failed",
+            )
+            .into());
         }
 
         Aes256Cbc::new(cipher_key, self.iv())?.decrypt(self.body())

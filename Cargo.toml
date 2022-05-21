@@ -1,24 +1,24 @@
 [package]
 name = "signal-provisioning-api"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Tomas Drtina <tm.drtina@gmail.com>"]
 edition = "2018"
 license = "AGPL-3.0-only"
 repository = "https://github.com/tm-drtina/signal-provisioning-api"
 
 [dependencies]
-libsignal-protocol = { git = "https://github.com/signalapp/libsignal-client.git", tag = "v0.11.0" }
-signal-crypto = { git = "https://github.com/signalapp/libsignal-client.git", tag = "v0.11.0" }
+libsignal-protocol = { git = "https://github.com/signalapp/libsignal.git", tag = "v0.16.0" }
+signal-crypto = { git = "https://github.com/signalapp/libsignal.git", tag = "v0.16.0" }
 
 aes = "0.7.4"
-subtle = "2.3"
+subtle = "2.2.3"
 block-modes = "0.8"
 hkdf = "0.11"
 sha2 = "0.9"
 
 base64 = "0.13.0"
-prost = "0.8"
+prost = "0.9"
 rand = "0.7.3"
 
 [build-dependencies]
-prost-build = "0.8"
+prost-build = "0.9"
