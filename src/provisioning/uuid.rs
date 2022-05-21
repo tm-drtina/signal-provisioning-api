@@ -23,7 +23,7 @@ impl ProvisioningUuid {
     pub fn provisioning_url(&self, ephemeral_pubkey: PublicKey) -> String {
         let public_key_base64 = base64::encode(ephemeral_pubkey.serialize());
         // We need to urlencode, but base64 has limited alphabet, so replace is enough
-        let public_key_base64 = public_key_base64.replace("+", "%2B").replace("/", "%2F");
+        let public_key_base64 = public_key_base64.replace('+', "%2B").replace('/', "%2F");
         format!(
             "tsdevice:/?uuid={}&pub_key={}",
             self.uuid, public_key_base64
