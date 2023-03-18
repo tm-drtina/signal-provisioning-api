@@ -7,7 +7,7 @@ use crate::error::{Error, Result};
 
 use std::convert::TryFrom;
 
-use base64::{Engine as _, engine::general_purpose};
+use base64::{engine::general_purpose, Engine as _};
 use libsignal_protocol::{PublicKey, SignalProtocolError};
 use prost::Message;
 

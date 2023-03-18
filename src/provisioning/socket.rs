@@ -18,7 +18,7 @@ use super::{ProvisionEnvelope, ProvisionMessage, ProvisioningUuid};
 pub enum ProvisioningState {
     Init,
     UuidReceived(ProvisioningUuid),
-    Provisioned(ProvisionMessage),
+    Provisioned(Box<ProvisionMessage>),
 }
 
 pub struct ProvisioningSocket {
@@ -111,7 +111,7 @@ impl ProvisioningSocket {
                     let plaintext = envelope.decrypt(self.ephemeral_key_pair.private_key)?;
                     let message = ProvisionMessage::try_from(plaintext.as_slice())?;
 
-                    self.state = ProvisioningState::Provisioned(message);
+                    self.state = ProvisioningState::Provisioned(Box::new(message));
                     Ok(Some(request_id))
                 } else {
                     Err(SignalProtocolError::InvalidProtobufEncoding.into())

@@ -15,6 +15,7 @@ subtle = "2.3"
 block-modes = "0.8"
 hkdf = "0.11"
 sha2 = "0.9"
+uuid = "1.1.2"
 
 base64 = "0.21"
 prost = "0.9"
