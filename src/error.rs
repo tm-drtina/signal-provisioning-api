@@ -6,6 +6,7 @@ use prost::DecodeError;
 pub enum Error {
     SignalProtocolError(SignalProtocolError),
     SignalCryptoError(SignalCryptoError),
+    UuidParsingError(uuid::Error),
 }
 
 impl From<SignalCryptoError> for Error {
@@ -23,6 +24,12 @@ impl From<SignalProtocolError> for Error {
 impl From<DecodeError> for Error {
     fn from(err: DecodeError) -> Self {
         err.into()
+    }
+}
+
+impl From<uuid::Error> for Error {
+    fn from(err: uuid::Error) -> Self {
+        Self::UuidParsingError(err)
     }
 }
 

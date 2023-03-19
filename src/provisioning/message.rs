@@ -9,21 +9,39 @@ use std::convert::TryFrom;
 
 use libsignal_protocol::{IdentityKey, IdentityKeyPair, PrivateKey, SignalProtocolError};
 use prost::Message;
+use uuid::Uuid;
 
 #[derive(Clone)]
 pub struct ProvisionMessage {
-    identity_key_pair: IdentityKeyPair,
+    aci: Uuid,
+    aci_identity_key_pair: IdentityKeyPair,
+    pni: Uuid,
+    pni_identity_key_pair: IdentityKeyPair,
     number: String,
     provisioning_code: String,
-    uuid: Option<String>,
     user_agent: Option<String>,
     read_receipts: Option<bool>,
 }
 
 impl ProvisionMessage {
     #[inline]
-    pub fn identity_key_pair(&self) -> &IdentityKeyPair {
-        &self.identity_key_pair
+    pub fn aci_identity_key_pair(&self) -> &IdentityKeyPair {
+        &self.aci_identity_key_pair
+    }
+
+    #[inline]
+    pub fn aci(&self) -> &Uuid {
+        &self.aci
+    }
+
+    #[inline]
+    pub fn pni_identity_key_pair(&self) -> &IdentityKeyPair {
+        &self.pni_identity_key_pair
+    }
+
+    #[inline]
+    pub fn pni(&self) -> &Uuid {
+        &self.pni
     }
 
     #[inline]
@@ -34,11 +52,6 @@ impl ProvisionMessage {
     #[inline]
     pub fn provisioning_code(&self) -> &String {
         &self.provisioning_code
-    }
-
-    #[inline]
-    pub fn uuid(&self) -> &Option<String> {
-        &self.uuid
     }
 
     #[inline]
@@ -58,12 +71,31 @@ impl TryFrom<&[u8]> for ProvisionMessage {
     fn try_from(value: &[u8]) -> Result<Self> {
         let proto_structure = crate::proto::device_messages::ProvisionMessage::decode(value)?;
 
-        let private_key = proto_structure
-            .identity_key_private
+        let aci = proto_structure
+            .aci
+            .ok_or(SignalProtocolError::InvalidProtobufEncoding)?
+            .parse()?;
+        let aci_private_key = proto_structure
+            .aci_identity_key_private
             .ok_or(SignalProtocolError::InvalidProtobufEncoding)?;
-        let private_key = PrivateKey::deserialize(private_key.as_slice())?;
-        let public_key = private_key.public_key()?;
-        let identity_key_pair = IdentityKeyPair::new(IdentityKey::new(public_key), private_key);
+        let aci_private_key = PrivateKey::deserialize(aci_private_key.as_slice())?;
+        let aci_identity_key_pair = IdentityKeyPair::new(
+            IdentityKey::new(aci_private_key.public_key()?),
+            aci_private_key,
+        );
+
+        let pni = proto_structure
+            .pni
+            .ok_or(SignalProtocolError::InvalidProtobufEncoding)?
+            .parse()?;
+        let pni_private_key = proto_structure
+            .pni_identity_key_private
+            .ok_or(SignalProtocolError::InvalidProtobufEncoding)?;
+        let pni_private_key = PrivateKey::deserialize(pni_private_key.as_slice())?;
+        let pni_identity_key_pair = IdentityKeyPair::new(
+            IdentityKey::new(pni_private_key.public_key()?),
+            pni_private_key,
+        );
 
         let number = proto_structure
             .number
@@ -71,13 +103,14 @@ impl TryFrom<&[u8]> for ProvisionMessage {
         let provisioning_code = proto_structure
             .provisioning_code
             .ok_or(SignalProtocolError::InvalidProtobufEncoding)?;
-        let uuid = proto_structure.uuid.map(|x| x.to_lowercase());
 
         Ok(ProvisionMessage {
-            identity_key_pair,
+            aci,
+            aci_identity_key_pair,
+            pni,
+            pni_identity_key_pair,
             number,
             provisioning_code,
-            uuid,
             user_agent: proto_structure.user_agent,
             read_receipts: proto_structure.read_receipts,
         })

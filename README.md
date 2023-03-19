@@ -9,3 +9,4 @@ Example client implemantation is still under way, but for reference: https://git
 | ------------------------ | ----------------- |
 | 0.4.0                    | 0.18.1            |
 | 0.5.0                    | 0.19.3            |
+| 0.6.0                    | 0.22.2            |
