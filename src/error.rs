@@ -1,12 +1,12 @@
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error("Signal protocol error")]
+    #[error(transparent)]
     SignalProtocolError(#[from] libsignal_protocol::SignalProtocolError),
-    #[error("Error from signal crypto module")]
+    #[error(transparent)]
     SignalCryptoError(#[from] signal_crypto::Error),
-    #[error("Decryption failed")]
+    #[error(transparent)]
     SignalCryptoDecryptionError(#[from] signal_crypto::DecryptionError),
-    #[error("Invalid UUID")]
+    #[error(transparent)]
     UuidParsingError(#[from] uuid::Error),
 }
 
