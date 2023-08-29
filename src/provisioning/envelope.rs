@@ -3,14 +3,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 //
 
-use crate::crypto::aes_cbc::Aes256Cbc;
 use crate::error::{Error, Result};
 
 use std::convert::TryFrom;
 
 use libsignal_protocol::{CiphertextMessageType, PrivateKey, PublicKey, SignalProtocolError};
 use prost::Message;
-use signal_crypto::CryptographicMac;
+use signal_crypto::{aes_256_cbc_decrypt, CryptographicMac};
 use subtle::ConstantTimeEq;
 
 pub struct ProvisionEnvelope {
@@ -67,7 +66,7 @@ impl ProvisionEnvelope {
             .into());
         }
 
-        Aes256Cbc::new(cipher_key, self.iv())?.decrypt(self.body())
+        aes_256_cbc_decrypt(self.body(), cipher_key, self.iv()).map_err(Into::into)
     }
 
     pub fn verify_mac(&self, mac_key: &[u8]) -> Result<bool> {

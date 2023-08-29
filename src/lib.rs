@@ -1,4 +1,3 @@
-mod crypto;
 mod error;
 mod proto;
 mod provisioning;

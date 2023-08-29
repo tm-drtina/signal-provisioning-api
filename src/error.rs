@@ -1,35 +1,18 @@
-use crate::SignalCryptoError;
-use libsignal_protocol::SignalProtocolError;
-use prost::DecodeError;
-
-#[derive(Debug)]
+#[derive(Debug, thiserror::Error)]
 pub enum Error {
-    SignalProtocolError(SignalProtocolError),
-    SignalCryptoError(SignalCryptoError),
-    UuidParsingError(uuid::Error),
+    #[error("Signal protocol error")]
+    SignalProtocolError(#[from] libsignal_protocol::SignalProtocolError),
+    #[error("Error from signal crypto module")]
+    SignalCryptoError(#[from] signal_crypto::Error),
+    #[error("Decryption failed")]
+    SignalCryptoDecryptionError(#[from] signal_crypto::DecryptionError),
+    #[error("Invalid UUID")]
+    UuidParsingError(#[from] uuid::Error),
 }
 
-impl From<SignalCryptoError> for Error {
-    fn from(err: SignalCryptoError) -> Self {
-        Self::SignalCryptoError(err)
-    }
-}
-
-impl From<SignalProtocolError> for Error {
-    fn from(err: SignalProtocolError) -> Self {
-        Self::SignalProtocolError(err)
-    }
-}
-
-impl From<DecodeError> for Error {
-    fn from(err: DecodeError) -> Self {
+impl From<prost::DecodeError> for Error {
+    fn from(err: prost::DecodeError) -> Self {
         err.into()
-    }
-}
-
-impl From<uuid::Error> for Error {
-    fn from(err: uuid::Error) -> Self {
-        Self::UuidParsingError(err)
     }
 }
 
