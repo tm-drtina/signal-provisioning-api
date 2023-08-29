@@ -23,3 +23,9 @@ rand = "0.8"
 
 [build-dependencies]
 prost-build = "0.9"
+
+[patch.crates-io]
+# Follow patched from libsignal
+# Use our fork of curve25519-dalek for zkgroup support.
+curve25519-dalek = { git = 'https://github.com/signalapp/curve25519-dalek', tag = 'signal-curve25519-4.0.0' }
+x25519-dalek = { git = 'https://github.com/signalapp/curve25519-dalek', tag = 'signal-curve25519-4.0.0' }
