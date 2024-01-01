@@ -7,8 +7,8 @@ license = "AGPL-3.0-only"
 repository = "https://github.com/tm-drtina/signal-provisioning-api"
 
 [dependencies]
-libsignal-protocol = { git = "https://github.com/signalapp/libsignal.git", tag = "v0.31.0" }
-signal-crypto = { git = "https://github.com/signalapp/libsignal.git", tag = "v0.31.0" }
+libsignal-protocol = { git = "https://github.com/signalapp/libsignal.git", tag = "v0.37.0" }
+signal-crypto = { git = "https://github.com/signalapp/libsignal.git", tag = "v0.37.0" }
 
 subtle = "2.3"
 hkdf = "0.12"
@@ -16,15 +16,9 @@ sha2 = "0.10"
 uuid = "1.1.2"
 
 base64 = "0.21"
-prost = "0.9"
+prost = "0.12"
 rand = "0.8"
 thiserror = "1.0.47"
 
 [build-dependencies]
-prost-build = "0.9"
-
-[patch.crates-io]
-# Follow patched from libsignal
-# Use our fork of curve25519-dalek for zkgroup support.
-curve25519-dalek = { git = 'https://github.com/signalapp/curve25519-dalek', tag = 'signal-curve25519-4.0.0' }
-x25519-dalek = { git = 'https://github.com/signalapp/curve25519-dalek', tag = 'signal-curve25519-4.0.0' }
+prost-build = "0.12"
